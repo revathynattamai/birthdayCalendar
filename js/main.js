@@ -1,5 +1,31 @@
+function getYear(){
+    return document.getElementById('birthYear').value;
+}
+
+function formGetDay(date, year) {
+    const a = date.split("/");
+    a[2] = year;
+    const newBirthDate = a.join('/');
+    return new Date(newBirthDate).getDay();
+}
+
+function getValue() {
+    var field = document.getElementById("json-input").value;
+    return new Function("a", "return " + field)();
+}
+
+const getFraction = num => {
+    let rect = "1fr";
+    let i = 1;
+    while (Math.pow(i, 2) < num) {
+        rect += " 1fr";
+        i++;
+    }
+    return rect;
+}
+
 function update() {
-    const year = document.getElementById('birthYear').value;
+    const year = getYear();
     const data = getValue();
     const result = [
         {
@@ -32,34 +58,12 @@ function update() {
         }
     ]
     data.map(a => {
-        const day = getDay(a.birthday, year);
-        if (day) {
+        const day = formGetDay(a.birthday, year);
+        if (!isNaN(day)) {
             result[day].birthdays.push(a.name);
         }
     })
     return render(result);
-}
-
-function getDay(date, year) {
-    const a = date.split("/");
-    a[2] = year;
-    const newBirthDate = a.join("/");
-    return new Date(newBirthDate).getDay();
-}
-
-function getValue() {
-    var field = document.getElementById("json-input").value;
-    return new Function("a", "return " + field)();
-}
-
-const getFraction = num => {
-    let rect = "1fr";
-    let i = 1;
-    while (Math.pow(i, 2) < num) {
-        rect += " 1fr";
-        i++;
-    }
-    return rect;
 }
 
 const render = (data) => {
